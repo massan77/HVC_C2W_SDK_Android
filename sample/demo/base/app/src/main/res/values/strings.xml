@@ -3,4 +3,15 @@
 
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
+    <string name="save_account">Save Account</string>
+    <string name="load_account">Load Account</string>
+    <string name="save_network">Save Network</string>
+    <string name="load_network">Load Network</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <string name="entry1">Entry1</string>
+    <string name="entry2">Entry2</string>
+    <string name="key_list_preference">KeyListPreference</string>
 </resources>

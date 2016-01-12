@@ -4,6 +4,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.media.AudioFormat;
 import android.media.AudioManager;
 import android.media.AudioTrack;
@@ -12,6 +13,7 @@ import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.os.AsyncTask;
 import android.os.Handler;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.InputType;
@@ -20,6 +22,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Adapter;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -154,6 +157,63 @@ public class MainActivity extends AppCompatActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+            return true;
+        }
+
+        if (id == R.id.save_account) {
+            SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(this);
+            SharedPreferences.Editor edit = pref.edit();
+
+            String email = ((EditText)findViewById(R.id.editText)).getText().toString();
+            String passwd = ((EditText)findViewById(R.id.editText2)).getText().toString();
+
+            // 本来は定数化すべき
+            edit.putString("login_id", email);
+            edit.putString("login_pass", passwd);
+            edit.commit();
+
+            return true;
+        }
+
+        if (id == R.id.load_account) {
+            SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(this);
+            String email = pref.getString("login_id", "");
+            String passwd = pref.getString("login_pass", "");
+
+            ((EditText)findViewById(R.id.editText)).setText(email);
+            ((EditText)findViewById(R.id.editText2)).setText(passwd);
+            return true;
+        }
+
+        if (id == R.id.save_network) {
+            SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(this);
+            SharedPreferences.Editor edit = pref.edit();
+
+            String ssid = (String)((Spinner)findViewById(R.id.spinner)).getSelectedItem();
+            String passwd = ((EditText)findViewById(R.id.editText3)).getText().toString();
+
+            // 本来は定数化すべき
+            edit.putString("network_ssid", ssid);
+            edit.putString("network_pass", passwd);
+            edit.commit();
+
+            return true;
+        }
+
+        if (id == R.id.load_network) {
+            SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(this);
+            String ssid = pref.getString("network_ssid", "");
+            String passwd = pref.getString("network_pass", "");
+
+            Spinner ssidSpinner = (Spinner)findViewById(R.id.spinner);
+            Adapter adapter = ssidSpinner.getAdapter();
+            for (int i = 0; i < adapter.getCount(); i++) {
+                if (adapter.getItem(i).equals(ssid)) {
+                    ssidSpinner.setSelection(i);
+                    break;
+                }
+            }
+            ((EditText)findViewById(R.id.editText3)).setText(passwd);
             return true;
         }
 
